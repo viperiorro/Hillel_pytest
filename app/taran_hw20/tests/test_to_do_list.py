@@ -24,10 +24,9 @@ def test_add_task_whithout_params(create_to_do_list):
 
 @pytest.mark.todo_list_suite
 def test_remove_task(create_task_for_to_do_list, create_to_do_list):
-    create_to_do_list.add_task(create_task_for_to_do_list)
     create_to_do_list.remove_task(create_task_for_to_do_list)
     result = create_to_do_list.tasks
-    assert len(result) == 1
+    assert len(result) == 0
 
 
 @pytest.mark.todo_list_suite
