@@ -1,4 +1,11 @@
 import pytest
+from app.to_do_list import ToDoList
+
+
+@pytest.mark.todo_list_suite
+def test_todolist_initialization():
+    todolist = ToDoList()
+    assert todolist.tasks == []
 
 
 @pytest.mark.todo_list_suite
@@ -34,12 +41,14 @@ def test_remove_task_non_existing_task(create_task_for_to_do_list, create_to_do_
 def test_marked_task_as_completed(create_task_for_to_do_list, create_to_do_list):
     create_to_do_list.add_task(create_task_for_to_do_list)
     create_to_do_list.mark_task_as_completed(create_task_for_to_do_list)
-    assert create_to_do_list.tasks[0].completed == True
+    assert create_to_do_list.tasks[0].completed
 
 
 @pytest.mark.todo_list_suite
 @pytest.mark.xfail
-def test_marked_completed_non_existing_task(create_task_for_to_do_list, create_to_do_list):
+def test_marked_completed_non_existing_task(
+    create_task_for_to_do_list, create_to_do_list
+):
     create_to_do_list.mark_task_as_completed(create_task_for_to_do_list)
     assert 0
 
@@ -48,7 +57,9 @@ def test_marked_completed_non_existing_task(create_task_for_to_do_list, create_t
 def test_display_tasks(create_task_for_to_do_list, create_to_do_list, capsys):
     create_to_do_list.display_tasks()
     result = capsys.readouterr()
-    expected_result = "test1 - test description - Due: 2023-07-26 - Priority: low - Completed: True\n"
+    expected_result = (
+        "test1 - test description - Due: 2023-07-26 - Priority: low - Completed: True\n"
+    )
     assert result.out == expected_result
 
 
