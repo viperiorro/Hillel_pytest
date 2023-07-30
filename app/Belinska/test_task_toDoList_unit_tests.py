@@ -2,6 +2,13 @@ import pytest
 
 from app.task import Task
 
+from app.to_do_list import ToDoList
+
+
+def test_todo_list_initialization():
+    todo_list = ToDoList()
+    assert len(todo_list.tasks) == 0
+
 
 @pytest.mark.standard
 def test_add_task(empty_todo_list):
@@ -30,15 +37,13 @@ def test_display_tasks(todo_list_with_tasks):
     todo_list_with_tasks.display_tasks()
 
 
-def test_get_pending_tasks(empty_todo_list, task1, task2):
-    empty_todo_list.add_task(task1)
-    empty_todo_list.add_task(task2)
-    assert len(empty_todo_list.get_pending_tasks()) == 2
-    empty_todo_list.mark_task_as_completed(task1)
-    assert len(empty_todo_list.get_pending_tasks()) == 1
-    assert empty_todo_list.get_pending_tasks()[0] == task2
-    empty_todo_list.mark_task_as_completed(task2)
-    assert len(empty_todo_list.get_pending_tasks()) == 0
+def test_get_pending_tasks(todo_list_with_tasks, task1, task2):
+    assert len(todo_list_with_tasks.get_pending_tasks()) == 2
+    todo_list_with_tasks.mark_task_as_completed(task1)
+    assert len(todo_list_with_tasks.get_pending_tasks()) == 1
+    assert todo_list_with_tasks.get_pending_tasks()[0] == task2
+    todo_list_with_tasks.mark_task_as_completed(task2)
+    assert len(todo_list_with_tasks.get_pending_tasks()) == 0
 
 
 @pytest.mark.xfail(reason="The get_completed_tasks method is not yet implemented correctly.")

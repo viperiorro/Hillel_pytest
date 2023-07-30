@@ -6,16 +6,19 @@ from app.to_do_list import ToDoList
 
 
 @pytest.fixture
-def general_task(task_data):
-    task = Task(title=task_data["title"], description=task_data["description"],
-                due_date=task_data["due_date"], priority=task_data["priority"])
+def general_task():
+    title = "General Task"
+    description = "This is a General task"
+    due_date = "28.07.2023"
+    priority = "Low"
+    task = Task(title, description, due_date, priority)
     return task
 
 
-@pytest.fixture
-def specific_task(task_data):
-    task = Task(title=task_data["title"], description=task_data["description"],
-                due_date=task_data["due_date"], priority=task_data["priority"])
+@pytest.fixture(scope="class")
+def completed_task():
+    task = Task(title="Completed Task", description="This task is completed", due_date="30.07.2023",
+                priority="Low")
     return task
 
 
@@ -25,10 +28,8 @@ def empty_todo_list():
 
 
 @pytest.fixture
-def todo_list_with_tasks():
+def todo_list_with_tasks(task1, task2):
     todo_list = ToDoList()
-    task1 = Task("Task 1", "This is task 1", "28.07.2023", "Low")
-    task2 = Task("Task 2", "This is task 2", "29.07.2023", "High")
     todo_list.add_task(task1)
     todo_list.add_task(task2)
     return todo_list
