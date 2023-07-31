@@ -31,9 +31,8 @@ class TestTask:
         assert test_task.completed is False
 
     @pytest.mark.test_task
-    def test_mark_as_completed(self, task_object):
-        task_object.mark_as_completed()
-        actual_result = task_object.__str__()
+    def test_mark_as_completed(self, task_object_completed):
+        actual_result = task_object_completed.__str__()
         expected_result = "Test - Create test - Due: 2023-07-30 - Priority: High - Completed: True"
         assert actual_result == expected_result
 
