@@ -13,7 +13,7 @@ def task_object2():
     return Task("Test2", "Create test2", "2023-08-25", "Low")
 
 
-@pytest.fixture()
+@pytest.fixture(scope="class")
 def create_to_do_list():
     return ToDoList()
 
