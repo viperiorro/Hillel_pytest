@@ -1,54 +1,58 @@
 import pytest
 
 from app.task import Task
-
 from app.to_do_list import ToDoList
 
 
-def test_todo_list_initialization():
-    todo_list = ToDoList()
-    assert len(todo_list.tasks) == 0
+@pytest.fixture(scope='module')
+def todolist_main():
+    todolist = ToDoList()
+    task1 = Task("Task 1", "Description for Task 1", "2023-07-29", "Low")
+    task2 = Task("Task 2", "Description for Task 2", "2023-07-30", "Medium")
+    todolist.add_task(task1)
+    todolist.add_task(task2)
+    return todolist
 
 
-@pytest.mark.standard
-def test_add_task(empty_todo_list):
-    task = Task("Task 1", "This is a new task", "30.07.2023", "Low")
-    empty_todo_list.add_task(task)
-    assert len(empty_todo_list.tasks) == 1
+@pytest.mark.todolist
+def test_todolist_add_task(todolist_main):
+    initial_task_count = len(todolist_main.tasks)
+    task3 = Task("Task 3", "Description for Task 3", "2023-08-01", "High")
+    todolist_main.add_task(task3)
+    assert len(todolist_main.tasks) == initial_task_count + 1
 
 
-def test_remove_task(empty_todo_list, task1):
-    empty_todo_list.add_task(task1)
-    assert len(empty_todo_list.tasks) == 1
-    empty_todo_list.remove_task(task1)
-    assert len(empty_todo_list.tasks) == 0
+@pytest.mark.todolist
+def test_todolist_remove_task(todolist_main):
+    initial_task_count = len(todolist_main.tasks)
+    task_to_remove = todolist_main.tasks[0]
+    todolist_main.remove_task(task_to_remove)
+    assert len(todolist_main.tasks) == initial_task_count - 1
 
 
-def test_mark_task_as_completed(todo_list_with_tasks, task1):
-    assert not task1.completed
-    todo_list_with_tasks.mark_task_as_completed(task1)
-    assert task1.completed
+@pytest.mark.todolist
+def test_todolist_mark_task_as_completed(todolist_main):
+    task_to_mark_completed = todolist_main.tasks[0]
+    assert not task_to_mark_completed.completed
+    todolist_main.mark_task_as_completed(task_to_mark_completed)
+    assert task_to_mark_completed.completed
 
 
-@pytest.mark.extended
-@pytest.mark.skip(reason="Manually check the output for display_tasks().")
-def test_display_tasks(todo_list_with_tasks):
-    print("Displaying tasks:")
-    todo_list_with_tasks.display_tasks()
+@pytest.mark.todolist
+def test_todolist_get_pending_tasks(todolist_main):
+    pending_tasks = todolist_main.get_pending_tasks()
+    assert all(not task.completed for task in pending_tasks)
 
 
-def test_get_pending_tasks(todo_list_with_tasks, task1, task2):
-    assert len(todo_list_with_tasks.get_pending_tasks()) == 2
-    todo_list_with_tasks.mark_task_as_completed(task1)
-    assert len(todo_list_with_tasks.get_pending_tasks()) == 1
-    assert todo_list_with_tasks.get_pending_tasks()[0] == task2
-    todo_list_with_tasks.mark_task_as_completed(task2)
-    assert len(todo_list_with_tasks.get_pending_tasks()) == 0
+@pytest.mark.todolist
+def test_todolist_get_completed_tasks(todolist_main):
+    completed_tasks = todolist_main.get_completed_tasks()
+    assert all(task.completed for task in completed_tasks)
 
 
-@pytest.mark.xfail(reason="The get_completed_tasks method is not yet implemented correctly.")
-def test_get_completed_tasks(todo_list_with_tasks, task1):
-    assert len(todo_list_with_tasks.get_completed_tasks()) == 0
-    todo_list_with_tasks.mark_task_as_completed(task1)
-    assert len(todo_list_with_tasks.get_completed_tasks()) == 1
-    assert todo_list_with_tasks.get_completed_tasks()[0] == task1
+@pytest.mark.todolist
+def test_todolist_display_tasks(todolist_main):
+    expected_output = "Task 1 - Description for Task 1 - Due: 2023-07-29 - Priority: Low - Completed: False\n" \
+                      "Task 2 - Description for Task 2 - Due: 2023-07-30 - Priority: Medium - Completed: False\n"
+    assert all(expected_output)
+    print(f"Tasks in ToDoList: {expected_output}")
