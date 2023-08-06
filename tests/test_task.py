@@ -97,17 +97,19 @@ def test_str_completed(task_object):
 
 @pytest.mark.task_suite
 @pytest.mark.init_suite
-@pytest.mark.xfail(reason="Unable initialization of object without Title")
+@pytest.mark.xfail(reason="Object initialization without Title is not implemented yet")
 def test_init_without_title():
-    Task(description="Description_01")
+    actual_result = Task(description="Description_01")
+    expected_result = TypeError("Unable object initialization without Title")
 
-    assert 0
+    assert actual_result == expected_result
 
 
 @pytest.mark.task_suite
 @pytest.mark.init_suite
-@pytest.mark.xfail(reason="Unable initialization of object without Description")
+@pytest.mark.xfail(reason="Object initialization without Description is not implemented yet")
 def test_init_without_description():
-    Task(title="Title_01")
+    actual_result = Task(title="Title_01")
+    expected_result = TypeError("Unable object initialization without Description")
 
-    assert 0
+    assert actual_result == expected_result

@@ -4,7 +4,7 @@ from app.task import Task
 from app.to_do_list import ToDoList
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture()
 def task_object():
     return Task(
         title="Title_01",
@@ -24,11 +24,6 @@ def task_object_1():
 @pytest.fixture()
 def to_do_list_empty_object():
     return ToDoList()
-
-
-@pytest.fixture()
-def to_do_list_tasks(to_do_list_empty_object):
-    return to_do_list_empty_object.tasks
 
 
 @pytest.fixture()
